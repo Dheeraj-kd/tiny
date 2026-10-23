@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff5f7">
+  <title>A Tiny Surprise 🐰</title>
+  <style>
+    :root{
+      --cream:#fffaf4; --pink:#ffdce7; --pink2:#ffb8cf; --rose:#c85d83;
+      --ink:#604653; --soft:#9a7785; --mint:#dff5e8; --yellow:#fff0b8;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; overflow-x:hidden; color:var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 10% 12%, #ffe7ef 0 2px, transparent 3px),
+        radial-gradient(circle at 88% 20%, #f9dfaa 0 3px, transparent 4px),
+        radial-gradient(circle at 18% 82%, #dff4e8 0 3px, transparent 4px),
+        var(--cream);
+      background-size:70px 70px, 110px 110px, 90px 90px, auto;
+    }
+    button{font:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent}
+    .wrap{width:min(720px,92vw); margin:0 auto; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:28px 0 36px; text-align:center}
+    .eyebrow{font-size:.75rem; letter-spacing:.16em; text-transform:uppercase; color:var(--rose); font-weight:800}
+    h1{font-size:clamp(2rem,7vw,3.5rem); line-height:1.05; margin:14px 0 12px; letter-spacing:-.04em}
+    .subtitle{max-width:440px; line-height:1.6; color:var(--soft); margin:0 auto}
+    .scene{position:relative; width:min(430px,90vw); height:250px; margin:20px auto 4px; display:grid; place-items:center}
+    .cloud{position:absolute; width:95px; height:35px; background:#fff; border-radius:30px; opacity:.8; animation:float 4s ease-in-out infinite}
+    .cloud:before,.cloud:after{content:""; position:absolute; background:inherit; border-radius:50%}
+    .cloud:before{width:38px;height:38px;left:15px;top:-18px}.cloud:after{width:48px;height:48px;right:12px;top:-24px}
+    .cloud.one{top:28px;left:5px}.cloud.two{right:5px;bottom:40px;transform:scale(.7);animation-delay:-2s}
+    .bunny{position:relative; z-index:2; width:150px; height:155px; border:0; background:transparent; padding:0; filter:drop-shadow(0 8px 0 #f5dce4); animation:bob 2.5s ease-in-out infinite; transition:transform .2s}
+    .bunny:active{transform:scale(.94)}
+    .bunny svg{width:100%;height:100%;overflow:visible}
+    .bunny .ear{transform-box:fill-box;transform-origin:bottom center;animation:earWiggle 3s ease-in-out infinite}
+    .bunny .ear.right{animation-delay:.4s}
+    .hint{font-size:.8rem;color:#ad8b98;margin-top:-4px}
+    .status{min-height:28px;font-weight:800;color:var(--rose);margin:10px 0 4px}
+    .arena{position:relative;width:min(520px,92vw);height:92px;margin:4px auto 8px}
+    .runaway{
+      position:absolute;left:50%;top:8px;transform:translateX(-50%);
+      border:0;border-radius:999px;padding:15px 23px;background:var(--pink2);color:#713c52;
+      font-weight:900;box-shadow:0 5px 0 #e996b3,0 10px 20px #e6b9c966;
+      white-space:nowrap;transition:left .22s ease,top .22s ease,transform .22s ease,background .2s;
+    }
+    .runaway:hover{background:#ffcada}
+    .runaway:focus-visible,.secondary:focus-visible,.gift:focus-visible,.bunny:focus-visible{outline:3px solid #9e6de0;outline-offset:4px}
+    .tiny{font-size:.82rem;color:var(--soft);min-height:22px}
+    .meter{width:min(270px,75vw);height:10px;border-radius:99px;background:#f5e6eb;overflow:hidden;margin:8px auto 5px}
+    .meter-fill{height:100%;width:0;background:linear-gradient(90deg,#ffc1d5,#f4a4bd);border-radius:99px;transition:width .35s}
+    .meter-label{font-size:.75rem;color:#a58491}
+    .panel{display:none;animation:pop .55s cubic-bezier(.2,.8,.2,1) both;width:100%}
+    .panel.show{display:block}
+    .celebrate{font-size:clamp(2.5rem,10vw,4rem);margin:10px 0;animation:wiggle .7s ease-in-out 2}
+    .gift{border:0;background:#fff;border-radius:24px;padding:18px 22px;box-shadow:0 8px 0 #f2d6df;display:inline-flex;flex-direction:column;gap:8px;align-items:center;color:var(--ink);margin:12px auto;transition:transform .2s}
+    .gift:hover{transform:translateY(-4px) rotate(-2deg)}
+    .gift-icon{font-size:3.4rem;display:block;animation:bob 1.8s ease-in-out infinite}
+    .gift-note{display:none;max-width:430px;margin:16px auto;padding:18px;border:2px dashed #f2b5c9;border-radius:20px;background:#fff8fb;line-height:1.6;animation:pop .35s ease both}
+    .gift-note.show{display:block}
+    .buttons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .secondary{border:1px solid #f0d2dd;background:#fffafc;color:#81576a;border-radius:999px;padding:11px 16px;font-weight:800}
+    .secondary:hover{background:#ffedf3}
+    .secret{display:none;margin:18px auto 0;max-width:430px;background:#f1eaff;border-radius:20px;padding:18px;line-height:1.6}
+    .secret.show{display:block;animation:pop .4s ease both}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#634958;color:white;padding:11px 16px;border-radius:999px;font-size:.9rem;z-index:20;transition:.3s;max-width:90vw}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+    .particle{position:fixed;pointer-events:none;z-index:15;animation:burst 1.4s ease-out forwards;font-size:var(--size,22px)}
+    .footer{margin-top:20px;color:#c0a5af;font-size:.75rem}
+    @keyframes bob{0%,100%{translate:0 0}50%{translate:0 -8px}}
+    @keyframes float{0%,100%{translate:0 0}50%{translate:8px -8px}}
+    @keyframes earWiggle{0%,75%,100%{rotate:0deg}82%{rotate:9deg}90%{rotate:-7deg}}
+    @keyframes pop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg) scale(1.08)}75%{transform:rotate(8deg) scale(1.08)}}
+    @keyframes burst{0%{opacity:1;transform:translate(0,0) scale(.5) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.3) rotate(var(--rot))}}
+    @media(max-width:480px){.scene{height:220px}.bunny{width:135px;height:140px}.arena{height:100px}.runaway{font-size:.92rem;padding:14px 18px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div id="main">
+      <div class="eyebrow">♡ a tiny internet surprise ♡</div>
+      <h1>pssst… hey, you! 🌷</h1>
+      <p class="subtitle">A tiny bunny has a surprise for you.<br>Unfortunately, the bunny is a little bit… suspicious.</p>
+
+      <div class="scene">
+        <div class="cloud one"></div><div class="cloud two"></div>
+        <button class="bunny" id="bunny" aria-label="Tap the bunny">
+          <svg viewBox="0 0 160 170" role="img" aria-label="A cute white bunny">
+            <g fill="#fff">
+              <ellipse class="ear" cx="56" cy="37" rx="19" ry="43" transform="rotate(-15 56 37)" stroke="#f0d8e1" stroke-width="2"/>
+              <ellipse class="ear right" cx="103" cy="35" rx="18" ry="42" transform="rotate(12 103 35)" stroke="#f0d8e1" stroke-width="2"/>
+              <ellipse cx="80" cy="104" rx="57" ry="54" stroke="#f0d8e1" stroke-width="2"/>
+              <ellipse cx="49" cy="145" rx="21" ry="12"/><ellipse cx="111" cy="145" rx="21" ry="12"/>
+            </g>
+            <ellipse cx="56" cy="37" rx="9" ry="29" fill="#ffc5d8" transform="rotate(-15 56 37)"/>
+            <ellipse cx="103" cy="35" rx="8" ry="28" fill="#ffc5d8" transform="rotate(12 103 35)"/>
+            <ellipse cx="60" cy="101" rx="5" ry="7" fill="#604653"/><ellipse cx="100" cy="101" rx="5" ry="7" fill="#604653"/>
+            <ellipse cx="43" cy="116" rx="10" ry="6" fill="#ffcad9" opacity=".9"/><ellipse cx="117" cy="116" rx="10" ry="6" fill="#ffcad9" opacity=".9"/>
+            <path d="M76 111 Q80 117 84 111" fill="none" stroke="#c87c95" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M80 108 l-4 -3 q-5 -4 -6 1 q0 5 10 8 q10 -3 10 -8 q-1 -5 -6 -1z" fill="#f49bb6"/>
+            <path d="M32 78 l-4 -8 M126 78 l4 -8" stroke="#f4b2c7" stroke-width="3" stroke-linecap="round"/>
+            <path d="M130 44 q9 -13 16 0 q-7 1 -8 8 q-1 -7 -8 -8" fill="#f6c85e"/>
+          </svg>
+        </button>
+      </div>
+      <div class="hint">ps. the bunny is absolutely up to something</div>
+      <div class="status" id="status" aria-live="polite">Ready when you are 👀</div>
+      <div class="arena" id="arena">
+        <button class="runaway" id="runaway">Click for a surprise ✨</button>
+      </div>
+      <div class="tiny" id="tiny">Go on. Nothing suspicious here.</div>
+      <div class="meter" aria-label="Bunny's surprise loading bar"><div class="meter-fill" id="meterFill"></div></div>
+      <div class="meter-label" id="meterLabel">surprise loading: 0%</div>
+    </div>
+
+    <section class="panel" id="ending">
+      <div class="eyebrow">MISSION COMPLETE</div>
+      <div class="celebrate">🎉🐰✨</div>
+      <h1>YOU CAUGHT THE BUNNY!</h1>
+      <p class="subtitle" id="endText">The bunny is shocked. The bunny is impressed. The bunny needs a tiny lie-down.</p>
+      <button class="gift" id="gift" aria-label="Open your mystery gift">
+        <span class="gift-icon">🎁</span>
+        <strong>Open your tiny gift</strong>
+        <span class="tiny">it's very important. probably.</span>
+      </button>
+      <div class="gift-note" id="giftNote">🌼 Official reminder from the Department of Tiny Things: you are allowed to take a breather, have a snack, and be gentle with yourself today. No productivity points required. 🌼</div>
+      <div class="buttons">
+        <button class="secondary" id="again">Again?! 😈</button>
+        <button class="secondary" id="hug">Virtual bunny hug 🫂</button>
+        <button class="secondary" id="secretBtn">Secret? 👀</button>
+      </div>
+      <div class="secret" id="secret">
+        🕶️ <strong>SECRET UNLOCKED</strong><br>
+        You have been promoted to Supreme Director of Bunny Affairs.<br>
+        Your responsibilities include snacks, naps, and absolutely no nonsense. 🐣
+      </div>
+    </section>
+    <div class="footer">made of pixels, fluff & a suspicious amount of confetti ♡</div>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const button = document.getElementById('runaway');
+    const arena = document.getElementById('arena');
+    const statusText = document.getElementById('status');
+    const tiny = document.getElementById('tiny');
+    const fill = document.getElementById('meterFill');
+    const meterLabel = document.getElementById('meterLabel');
+    const main = document.getElementById('main');
+    const ending = document.getElementById('ending');
+    const bunny = document.getElementById('bunny');
+    const toast = document.getElementById('toast');
+    let attempts = 0, bunnyTaps = 0, finished = false, toastTimer;
+
+    const taunts = [
+      ["hehehe too slow 🐇", "The bunny has activated tiny legs."],
+      ["NOPE. TRY AGAIN 😌", "Bunny dodging skills: suspiciously professional."],
+      ["you almost had it!!", "A tiny cloud has filed a motion to help the bunny."],
+      ["wait wait WAIT—", "The bunny is panicking in lowercase."],
+      ["okay that's actually impressive 😳", "Surprise system is now 127% confused."],
+      ["FINE. YOU WIN. 😤", "The bunny has dramatically accepted its fate."]
+    ];
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2100);
+    }
+    function moveButton() {
+      if (finished) return;
+      attempts++;
+      if (attempts >= 6) { catchBunny(); return; }
+      const maxX = Math.max(0, arena.clientWidth - button.offsetWidth);
+      const maxY = Math.max(0, arena.clientHeight - button.offsetHeight);
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+      button.style.left = `${x}px`;
+      button.style.top = `${y}px`;
+      button.style.transform = 'rotate(' + (Math.random()*10-5) + 'deg)';
+      statusText.textContent = taunts[Math.min(attempts-1, taunts.length-1)][0];
+      tiny.textContent = taunts[Math.min(attempts-1, taunts.length-1)][1];
+      const percent = [12, 34, 58, 82, 127][Math.min(attempts-1,4)];
+      fill.style.width = `${Math.min(percent,100)}%`;
+      meterLabel.textContent = `surprise loading: ${percent}%`;
+      if (attempts === 4) showToast('⚠️ Bunny.exe is not responding');
+      if (attempts === 5) {
+        button.textContent = 'OKAY OKAY CATCH ME 😭';
+        button.style.background = '#dff5e8';
+      }
+    }
+    function burst(x, y, count=32) {
+      const symbols = ['💖','✨','🌸','💕','⭐','🎉','🩷'];
+      for (let i=0;i<count;i++) {
+        const p = document.createElement('span');
+        p.className = 'particle';
+        p.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+        p.style.left = `${x}px`; p.style.top = `${y}px`;
+        p.style.setProperty('--dx', `${(Math.random()-.5)*420}px`);
+        p.style.setProperty('--dy', `${-60-Math.random()*300}px`);
+        p.style.setProperty('--rot', `${Math.random()*180-90}deg`);
+        p.style.setProperty('--size', `${16+Math.random()*20}px`);
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(),1500);
+      }
+    }
+    function catchBunny() {
+      finished = true;
+      const rect = button.getBoundingClientRect();
+      burst(rect.left + rect.width/2, rect.top + rect.height/2, 50);
+      main.style.display = 'none';
+      ending.classList.add('show');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    button.addEventListener('pointerenter', e => {
+      // On desktop, it cheekily dodges as the pointer approaches. Touch uses click instead.
+      if (e.pointerType === 'mouse' && attempts < 5 && !finished) moveButton();
+    });
+    button.addEventListener('click', e => {
+      e.preventDefault();
+      if (!finished) moveButton();
+    });
+    bunny.addEventListener('click', () => {
+      bunnyTaps++;
+      bunny.style.transform = `rotate(${bunnyTaps%2 ? -10 : 10}deg) scale(1.05)`;
+      setTimeout(()=>bunny.style.transform='',220);
+      if (bunnyTaps >= 5) {
+        bunnyTaps = 0;
+        burst(window.innerWidth/2, window.innerHeight/2, 25);
+        showToast('🕶️ Bunny says: cool people only. You may enter.');
+        tiny.textContent = 'The bunny has entrusted you with a highly classified carrot.';
+      } else {
+        showToast(['boop! 🐰','that tickles!!','hehe stoppp','bunny says hi 🥕'][Math.min(bunnyTaps-1,3)]);
+      }
+    });
+    document.getElementById('gift').addEventListener('click', () => {
+      document.getElementById('giftNote').classList.toggle('show');
+      const r = document.getElementById('gift').getBoundingClientRect();
+      burst(r.left+r.width/2, r.top+20, 22);
+    });
+    document.getElementById('hug').addEventListener('click', () => {
+      burst(window.innerWidth/2, window.innerHeight*.45, 35);
+      showToast('🐰 *squish* a soft little bunny hug for you');
+    });
+    document.getElementById('secretBtn').addEventListener('click', () => {
+      document.getElementById('secret').classList.toggle('show');
+      burst(window.innerWidth/2, window.innerHeight*.65, 18);
+    });
+    document.getElementById('again').addEventListener('click', () => {
+      attempts=0; finished=false;
+      ending.classList.remove('show');
+      document.getElementById('giftNote').classList.remove('show');
+      document.getElementById('secret').classList.remove('show');
+      main.style.display='block';
+      button.textContent='Click for a surprise ✨';
+      button.style.cssText='';
+      button.style.left='50%'; button.style.top='8px'; button.style.transform='translateX(-50%)';
+      statusText.textContent='Ready when you are 👀';
+      tiny.textContent='Go on. Nothing suspicious here.';
+      fill.style.width='0%'; meterLabel.textContent='surprise loading: 0%';
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  </script>
+</body>
+</html>
