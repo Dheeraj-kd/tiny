@@ -218,13 +218,48 @@ const reactions=[
   ['WAIT—','A tiny panic has entered the chat.'],
   ['okay, okay…','The button is sweating. This is not a drill.']
 ];
-const giftData={
- hug:{title:'Come here, you. 🫂',text:'Consider this a long, proper hug. The sort where you can unclench your shoulders, breathe out, and stay there for a second longer. No fixing anything. No explaining anything. Just a hug. Squeeze, squeeze.',sign:'hug delivered with extra squish',art:'hug'},
- kiss:{title:'Mwah. Mwah. MWAH. 💋',text:'One kiss on the forehead. One on the cheek. One on the nose because it was right there. And one more because the delivery person said “last one” three kisses ago. 💋',sign:'delivery status: absolutely smothered',art:'kiss'},
- note:{title:'For when today is being a lot',text:'Nancuu, I wish I could take you out of work-mode for a bit, get you something nice to eat, and let you rant about absolutely everything. No fixing it unless you want me to. I’ll just listen, keep you company, and give you a proper hug. Deal? ♡',sign:'a little message',art:'note'},
- flower:{title:'A flower, just because 🌷',text:'This little flower is yours. No special occasion, no reason to earn it. Just a small pretty thing for your day. Imagine it sitting somewhere sunny, minding its own business, and looking lovely. You can do that too.',sign:'picked especially for you',art:'flower'},
- silly:{title:'URGENT: very important nonsense',text:'A tiny duck in sunglasses just walked into a meeting, said “quack to the future,” and left without answering a single email. The whole office is confused. The duck has been promoted. 🦆',sign:'this message was approved by no one',art:'silly'},
- fortune:{title:'Your extremely unofficial forecast',text:'There is a decent chance of a good snack, a comfy moment, and at least one thing that makes you smile. A small patch of peace is moving in from the west. Take it when it arrives. Lucky colour: the pink of strawberry milk.',sign:'the tiny stars have spoken',art:'fortune'}
+const giftData = {
+  hug: {
+    title: 'Come here, Nancuu 🫂',
+    text: 'I wish I could give you a big hug right now and just let you stay there for a while. You’ve had enough of a day. Come here, no arguments. ❤️',
+    sign: '🤍',
+    art: 'hug'
+  },
+
+  kiss: {
+    title: 'Mwahhh 💋',
+    text: 'Okay, one kiss. Fine, two. Okay wait, one more. 😭❤️ You know what, just take all of them. I’m not counting.',
+    sign: '💋💋💋',
+    art: 'kiss'
+  },
+
+  note: {
+    title: 'Hey, Nancuu ❤️',
+    text: 'I know work has been getting to you. I wish I could be there with you right now, listen to you rant about it all, and make you forget about it for a little while. You don’t have to pretend you’re okay with me, okay?',
+    sign: 'always here to listen',
+    art: 'note'
+  },
+
+  flower: {
+    title: 'These are all yours, pretty girl 🌷',
+    text: 'A whole bunch of flowers for you, because one didn’t feel like enough. I’d get you the real ones if I could right now. For now, you get this little bouquet. ❤️',
+    sign: '🌷🌸🌷🌸🌷',
+    art: 'flower'
+  },
+
+  silly: {
+    title: 'A very important announcement 😭',
+    text: 'Nancy has officially been excused from thinking about work for the next little while. Any further work-related thoughts must be submitted in writing and will be ignored until further notice. Thank you for your cooperation.',
+    sign: 'management (me)',
+    art: 'silly'
+  },
+
+  fortune: {
+    title: 'My prediction for you ✨',
+    text: 'I predict that you’re going to eat something nice, get some proper rest, and have at least one moment today where you forget everything that’s been annoying you. And if not today, then soon. ❤️',
+    sign: 'manifesting this for you',
+    art: 'fortune'
+  }
 };
 function toastMsg(s){toast.textContent=s;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),2400)}
 function heartSVG(color='#e982a1'){return `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 34 C14 28 4 21 4 13 C4 5 14 3 20 12 C26 3 36 5 36 13 C36 21 26 28 20 34Z" fill="${color}"/></svg>`}
